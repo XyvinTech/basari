@@ -1,0 +1,170 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Blank theme overrides
+//  _____________________________________________
+
+//  Theme file should contain declarations (overrides) ONLY OF EXISTING variables
+//  Otherwise this theme won't be available for parent nesting
+//  All new variables should be placed in local theme lib or local theme files
+
+.modal-popup .modal-footer,
+.modal-popup .modal-content,
+.modal-popup .modal-header {
+  box-shadow: none;
+  border: none;
+}
+.order-success-link {
+    color: #826fc9!important;
+}
+.page-layout-2columns-left .column.main > .shop_product_wrapper {
+    margin: 0 auto;
+    padding: 0;
+}
+.product-info-main .price-box .special-price .price {
+    color: #6fcf97;
+}
+.product-info-main .price-box {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: baseline;
+}
+.product-info-main .price-box .old-price {
+    order: -1;
+    font-weight: 500;
+    font-size: 20px;
+    color: #bdbdbd;
+    margin-right: 5px;
+    display: inline-block;
+    text-decoration-line: line-through;
+    text-decoration-color: #bdbdbd;
+    .price-label {
+        display: none;
+    }
+}
+.services_content_wrap p, .services_content_wrap p {
+    text-align: left!important;
+}
+.checkout.methods button.action.primary.checkout {
+    font-size: 16px!important;
+}
+.cart_item_btns_wrap .quantity .field.qty {
+    display: flex;
+    align-items: center;
+}
+.product_variant_label_right {
+    width: 30px;
+    text-align: right;
+    cursor: pointer;
+}
+.product_variant_box .field div.control select {
+    padding: 15px 40px 15px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIGZpbGw9J25vbmUnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggc3Ryb2tlPScjNmI3MjgwJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnIHN0cm9rZS13aWR0aD0nMS41JyBkPSdtNiA4IDQgNCA0LTQnLz48L3N2Zz4=');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 20px;
+}
+.filter-active .shop_filter_wrap {
+    visibility: visible;
+    transform: none;
+    padding: 10px;
+    left: 0;
+    top: 70px;
+    right: 10px;
+    width: auto;
+     bottom: 0;
+    overflow: auto;
+}
+.filter-active .page-main {
+    position: relative;
+    z-index: 1000;
+}
+
+.filter-active .block-title.filter-title {
+    position: fixed;
+    top: 0;
+    z-index: 1000000;
+    background: #fff;
+    right: 10px;
+    left: 0;
+    padding: 23px 10px;
+}
+.filter-active .block-title.filter-title strong {
+    display: flex;
+    justify-content: space-between;
+}
+body:not(.filter-active) .filter-toggle,
+.filter-active .block-title.filter-title strong .shop_prod_resp_head_filter_btn,
+body:not(.filter-active) .block-title.filter-title strong .btn-close {
+    display: none;
+}
+body:not(.filter-active) .block-title.filter-title {
+    margin-bottom: 20px;
+    width: 100%;
+}
+body:not(.filter-active) .block-title.filter-title strong {
+    display: block;
+    width: 48%;
+    float: right;
+}
+.filter-active:after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0.5;
+    z-index: 999;
+}
+.action-primary.action-accept {
+    color: #fff;
+}
+.product-info-main .price-box .normal-price .price-wrapper .price {
+    color: #6fcf97;
+}
+.catalog-product-view .upload_form a {
+    color: #8270c9!important;
+}
+@media only screen and (min-width: 768px) {
+    .shop_filter_wrap {
+        position: inherit;
+        visibility: visible;
+    }
+    .block-title.filter-title {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .mob_dashboard_select .form-select {
+        min-width: 145px;
+    }
+    .actions-toolbar .primary .save {
+        width: 50%!important;
+    }
+    .actions-toolbar .primary .action.save {
+        width: 60%!important;
+    }
+}
+
+
+.fotorama__thumb-border
+{
+  border : 1px solid #826fc9 !important;
+  border-radius: 7px !important;
+}
+.product-info-main .stock.available{color:#27ae60 !important;}
+
+.product-info-main .price-box{
+flex-direction: column !important;}
+
+.home_product_item_save_amount{
+color:#fa0b0b !important;
+}

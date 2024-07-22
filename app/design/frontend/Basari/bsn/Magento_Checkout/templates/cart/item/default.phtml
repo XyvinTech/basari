@@ -1,0 +1,142 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.Files.LineLength
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer */
+
+$_item = $block->getItem();
+$product = $_item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper(Magento\Msrp\Helper\Data::class);
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
+?>
+<div class="cart_main_split img_skeleton skeleton">
+        <ul class="cart_items_wrap">
+          <li class="cart_item_wrap hide-div">
+		    <div class="cart_item_img">
+              <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
+            </div>
+			<div class="cart_item_right_wrap">
+              <div class="cart_item_product_details_wrap">
+                <div class="cart_product_name"><?php if ($block->hasProductUrl()): ?>
+                        <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a>
+                    <?php else: ?>
+                        <?= $block->escapeHtml($block->getProductName()) ?>
+                    <?php endif; ?></div>
+                <div class="cart_product_variant_name">
+                     <?php if ($_options = $block->getOptionList()): ?>
+						<dl class="item-options">
+							<?php foreach ($_options as $_option): ?>
+								<?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+								<dt><?= $block->escapeHtml($_option['label']) ?></dt>
+								<dd>
+									<?php if (isset($_formatedOptionValue['full_view'])): ?>
+											<?= $block->escapeHtml($_formatedOptionValue['full_view'], ['span', 'a']) ?>
+										<?php else: ?>
+											<?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
+									<?php endif; ?>
+								</dd>
+							<?php endforeach; ?>
+						</dl>
+					<?php endif; ?>
+					<?php if ($messages = $block->getMessages()): ?>
+						<?php foreach ($messages as $message): ?>
+							<div class= "cart item message <?= $block->escapeHtmlAttr($message['type']) ?>">
+								<div><?= $block->escapeHtml($message['text']) ?></div>
+							</div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+					<?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+					<?php if ($addInfoBlock): ?>
+						<?= $addInfoBlock->setItem($_item)->toHtml() ?>
+					<?php endif; ?>
+                </div>
+                <div class="cart_product_price_wrap">
+				<?php if ($canApplyMsrp): ?>
+                  <div class="cart_product_actual_price">
+                    <span class="pricing msrp">
+						<span class="msrp notice"><?= $block->escapeHtml(__('See price before order confirmation.')) ?></span>
+						<?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
+						<a href="#" class="action help map"
+						   id="<?= ($block->escapeHtmlAttr($helpLinkId)) ?>"
+						   data-mage-init='{"addToCart":{
+												"origin": "info",
+												"helpLinkId": "#<?= $block->escapeJs($block->escapeHtml($helpLinkId)) ?>",
+												"productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
+												"showAddToCart": false
+												}
+											}'
+						>
+							<span><?= $block->escapeHtml(__("What's this?")) ?></span>
+						</a>
+					</span>
+                  </div>
+                  <div class="cart_product_sales_price">AED 20.00
+                  </div>
+				  <?php else: ?>
+				    <div class="cart_product_sales_price">
+						<?= $block->getUnitPriceHtml($_item) ?>
+					</div>
+				  <?php endif; ?>
+                </div>
+              </div>
+              <div class="cart_item_btns_wrap">
+							 <div class="quantity">
+			                  <button class="quantity__minus">-</button>
+												<div class="field qty">
+													<input id="cart-<?= $block->escapeHtmlAttr($_item->getId()) ?>-qty"
+																   name="cart[<?= $block->escapeHtmlAttr($_item->getId()) ?>][qty]"
+																   data-cart-item-id="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
+																   value="<?= $block->escapeHtmlAttr($block->getQty()) ?>"
+																   type="number"
+																   size="4"
+																   step="any"
+																   title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+																   class="input-text qty checkout-cart-qty"
+																   data-validate="{required:true,'validate-greater-than-zero':true}"
+																   data-item-qty="<?= $block->escapeHtmlAttr($block->getQty()) ?>"
+																   data-role="cart-item-qty"/>
+												</div>
+			                  <button class="quantity__plus">+</button>
+			                </div>                
+                <div class="cart_item_delete_btn_wrap">
+                  <button class="cart_item_delete_btn"><?= /* @noEscape */ $block->getActions($_item) ?></button>
+                </div>
+              </div>
+            </div>
+		  </li>
+		</ul>
+</div>		
+<script>
+   require(['jquery', 'domReady'], function ($) {
+     $(document).ready(function () {
+			const minus = $('.quantity__minus');
+		  const plus = $('.quantity__plus');
+		  minus.click(function(e) {
+		  	console.log('minus---');
+		    e.preventDefault();
+		    const input = $(".checkout-cart-qty");
+		    var value = input.val();
+		    if (value > 1) {
+		      value--;
+		    }
+		    input.val(value);
+		  });
+
+		  plus.click(function(e) {
+		  	console.log('plus+++');
+		    e.preventDefault();
+		    const input = $(".checkout-cart-qty");
+		    var value = input.val();
+		    value++;
+		    input.val(value);
+		  });			
+		});
+});
+</script>

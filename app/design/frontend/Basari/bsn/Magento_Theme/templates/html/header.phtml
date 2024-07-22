@@ -1,0 +1,88 @@
+<?php
+// Insert Google Language Translator here
+echo $this->getLayout()
+->createBlock('Magento\Framework\View\Element\Template')
+->setTemplate('Magecomp_Googlelangtranslator::langtranslator.phtml')
+->toHtml();
+?>
+<?php
+
+echo $this->getLayout()
+    ->createBlock('Magento\Cms\Block\Block')
+    ->setBlockId('header_top')
+    ->toHtml();
+    
+?>
+
+
+<header>
+    <div class="main-wrapper">
+      <nav class="navbar_wrap">
+        <!--<ul class="header_resp_left_icons">
+          <li class="header_resp_left_icon" >
+            <a href=""><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/basari.png" /></a>
+          </li>
+          <li class="header_resp_left_icon" >
+            <?php /*echo $this->getChildHtml("topSearch"); */?>
+          </li>
+        </ul>-->
+        <div class="header_logo">
+        <a href="https://magento-920116-4739515.cloudwaysapps.com/"><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/basari.png" /></a>
+          <?php //echo $this->getChildHtml("logo");
+        ?>
+        </div>
+        <?php
+          echo $this->getLayout()
+              ->createBlock('Magento\Cms\Block\Block')
+              ->setBlockId('menu')
+              ->toHtml();
+        ?>
+        <div class="nav_right">
+          <ul class="header_menu_icons_wrap">
+            <li class="header_menu_icon">
+               <?php echo $this->getChildHtml("topSearch"); ?>
+            </li>
+            <li class="header_menu_icon header_menu_cart">
+               <?php echo $this->getChildHtml("minicart"); ?>
+            </li>
+      <button class="header_menu_icon_user_btn" onclick="myFunction()">
+                <i class="fas fa-user"></i>
+              </button>
+
+              <ul id="myDIV" class="header_user_icon_hover_list" style="display: none">
+                <li class="header_user_icon_hover_list_item">
+                  <a href="https://magento-920116-4739515.cloudwaysapps.com/customer/account/login"><span class="header_user_sub"><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/account_circle.svg" /></span><span class="header_user_sub_text">Account</span>
+                  </a>
+                </li>
+                <li class="header_user_icon_hover_list_item">
+                  <span class="header_user_sub_text">
+                    <span class="header_user_sub"><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/logout.svg" /></span>
+                    <?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+if ($customerSession->isLoggedIn()): ?>
+                    <span class="header_account_link_list logout">
+                      <a class= "header_account_link" href="<?php echo $this->getUrl("customer/account/logout"); ?>"><?php echo __('Logout') ?></a>
+                    </span>
+                  <?php
+else: ?>
+                    <span class="header_account_link_list login">
+                      <a class= "header_account_link" href="<?php echo $this->getUrl("customer/account/login"); ?>"><?php echo __('Sign in') ?></a>
+                    </span>
+                  <?php
+endif; ?></span>
+                </li>
+              </ul>
+            <li class="header_menu_icon header_menu_icon_user" style="height:20px !important">
+          <?php echo $this->getChildHtml("header.links"); ?>
+            </li>
+          </ul>
+          <div class="navbar-toggler" id="menu-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+        </div>
+      </nav>
+    </div>
+</header>

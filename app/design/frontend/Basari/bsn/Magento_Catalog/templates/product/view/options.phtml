@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var $block \Magento\Catalog\Block\Product\View\Options */
+?>
+
+<?php $_options = $block->decorateArray($block->getOptions()) ?>
+<?php $_productId = $block->getProduct()->getId() ?>
+<?php if (count($_options)) :?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "priceOptions": {
+                "optionConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                "controlContainer": ".field",
+                "priceHolderSelector": "[data-product-id='<?= $block->escapeHtml($_productId) ?>'][data-role=priceBox]"
+            }
+        }
+    }
+</script>
+<div class="product_variant_box hide-div">
+
+            <div class="product_variant_label_box">
+                <label class="variant_label">Select lenses</label>
+                <div class="product_variant_label_right">
+                  <span class="product_variant_label_box_arrow">
+                    <i class="fas fa-chevron-down custom_arrow"></i>
+                  </span>
+                </div>
+            </div>
+            <div class="product_customoption">
+              <div class="product_variant_drop">
+                <ul class="product_lenses_wrap">
+                    <?php foreach ($_options as $_option) :?>
+                    <li>
+                        <?= $block->getOptionHtml($_option) ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+              </div>
+            </div>
+
+
+    </div>
+<?php endif; ?>
+

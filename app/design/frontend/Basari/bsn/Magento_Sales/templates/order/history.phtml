@@ -1,0 +1,111 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Sales\Block\Order\History $block */
+?>
+<?php $_orders = $block->getOrders(); ?>
+<?= $block->getChildHtml('info') ?>
+<?php if ($_orders && count($_orders)) : ?>
+     <!-- Order table -->
+      <section class="main_container">
+          <div class="order_table hide-div img_skeleton skeleton">
+            <!-- order table head -->
+            <ul class="order_table_head">
+              <li class="order_table_head_item"><?= $block->escapeHtml(__('ORDER NUMBER')) ?> </li>
+              <li class="order_table_head_item"><?= $block->escapeHtml(__('DATE')) ?></li>
+              <li class="order_table_head_item"><?= $block->escapeHtml(__('STATUS')) ?></li>
+              <li class="order_table_head_item"><?= $block->escapeHtml(__('TOTAL')) ?></li>
+              <li class="order_table_head_item"><?= $block->escapeHtml(__('ACTIONS')) ?></li>
+            </ul>
+
+            <ul class="order_table_body">
+              <?php foreach ($_orders as $_order) : ?>
+              <li class="order_table_body_child">
+                <ul class="order_table_body_item_wrap">
+                  <li class="order_table_body_item"><?= $block->escapeHtml($_order->getRealOrderId()) ?> </li>
+                  <li class="order_table_body_item"><?= /* @noEscape */ $block->formatDate($_order->getCreatedAt()) ?> </li>
+                  <?php $extra = $block->getChildBlock('extra.container'); ?>
+                        <?php if ($extra) : ?>
+                            <?php $extra->setOrder($_order); ?>
+                            <?= $extra->getChildHtml() ?>
+                        <?php endif; ?>
+                  <li class="order_table_body_item"><?= $block->escapeHtml($_order->getStatusLabel()) ?> </li>
+                  <li class="order_table_body_item"><?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()) ?> </li>
+                  <li class="order_table_body_item">
+                    <a href="<?= $block->escapeUrl($block->getViewUrl($_order)) ?>" class="view_order_btn action view">
+                        <span><?= $block->escapeHtml(__('View Order')) ?></span>
+                    </a>
+                    <?php if ($this->helper(\Magento\Sales\Helper\Reorder::class)->canReorder($_order->getEntityId())) : ?>
+                        <a href="#" data-post='<?= /* @noEscape */
+                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                    ->getPostData($block->getReorderUrl($_order))
+                                ?>' class="view_order_btn action order">
+                            <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+                        </a>
+                        <?php endif ?></a> </li>
+                </ul>
+              </li>
+              <?php endforeach; ?>
+            </ul>
+
+          </div>
+          <div class="resp_order_table">
+            <?php foreach ($_orders as $_order) : ?>
+            <ul class="resp_order_list">
+              <li class="resp_order_item">
+                <div class="resp_order_item_label">
+                  ORDER NUMBER
+                </div>
+                <div class="resp_order_item_value"><?= $block->escapeHtml($_order->getRealOrderId()) ?></div>
+              </li>
+              <li class="resp_order_item">
+                <div class="resp_order_item_label">
+                  DATE
+                </div>
+                <div class="resp_order_item_value"><?= /* @noEscape */ $block->formatDate($_order->getCreatedAt()) ?></div>
+              </li>
+              <li class="resp_order_item">
+                <div class="resp_order_item_label">
+                  STATUS
+                </div>
+                <div class="resp_order_item_value"><?= $block->escapeHtml($_order->getStatusLabel()) ?></div>
+              </li>
+              <li class="resp_order_item">
+                <div class="resp_order_item_label">
+                  TOTAL
+                </div>
+                <div class="resp_order_item_value"><?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()) ?></div>
+              </li>
+              <li class="resp_order_item">
+                <div class="resp_order_item_label">
+                  ACTIONS
+                </div>
+                <div class="resp_order_item_value">
+                      <a href="<?= $block->escapeUrl($block->getViewUrl($_order)) ?>" class="view_order_btn">
+                        <span><?= $block->escapeHtml(__('View Order')) ?></span>
+                    </a>
+                </div>
+              </li>
+            </ul>
+            <?php endforeach; ?>         
+          </div>
+      </section>
+    <?php if ($block->getPagerHtml()) : ?>
+        <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
+    <?php endif ?>
+<?php else : ?>
+    <!-- No order wrap -->
+    <section class="main_container">
+      <div class="no_orders_wrap">
+        <span>No order has been made yet.</span>
+        <a href="shop.html" class="no_orders_browse_btn">BROWSE PRODUCT</a>
+      </div>
+    </section>
+<?php endif ?>
+</section>

@@ -1,0 +1,20 @@
+{
+	"name": "Basari/theme-frontend-bsn",
+	"description": "N/A",
+	"require": {
+	"php": "~5.6|~7.0|~7.1|~7.2|~7.3|~7.4",
+	"Basari/bsn": "100.0.*",
+	"magento/framework": "100.0.*"
+	},
+	"type": "magento2-theme",
+	"version": "100.0.1",
+	"license": [
+		"OSL-3.0",
+		"AFL-3.0"
+	],
+	"autoload": {
+		"files": [
+			"registration.php"
+		]
+	}
+}

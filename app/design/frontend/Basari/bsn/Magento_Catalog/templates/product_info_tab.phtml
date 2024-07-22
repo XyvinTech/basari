@@ -1,0 +1,155 @@
+<?php
+  $prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
+  $currentProudct = $prouductHelper->getCurrentProduct();
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+?>
+<?php
+echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('product_safety_protocol')->toHtml();
+?>
+<section>
+    <div class="main_container img_skeleton skeleton">
+      <div class="product_info_tab_wrapper hide-div">
+        <ul class="product_info_tabs_wrap">
+          <li class="product_info_tab active">
+            Description
+          </li>
+          <li class="product_info_tab">
+            Aditional information
+          </li>
+          <li class="product_info_tab">
+            Reviews(0)
+          </li>
+		  <?php //if($customerSession->isLoggedIn()) { ?>
+		  <li class="product_info_tab">
+            Upload Prescription
+          </li>
+		  <?php //} ?>
+        </ul>
+
+        <ul class="product_info_tabs_content_wrap">
+          <li class="product_info_tab_content active">
+            <p><?php echo $currentProudct->getDescription(); ?></p>
+
+          </li>
+          <li class="product_info_tab_content">
+            <ul class="additional_info_list_wrap">
+              <li class="additional_info_list_item">
+                <?php echo $currentProudct->getAdditionalInformation(); ?>                
+              </li>
+            </ul>
+          </li>
+          <li class="product_info_tab_content">
+            <div class="product_review_split">
+              <div class="product_reviews">
+                <?php //echo $block->getLayout()->createBlock("Magento\Review\Block\Form")->setTemplate('Magento_Review::product/view/list.phtml')->toHtml(); ?>
+                <?php
+                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                    //Get current store id
+                    $storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+                    $currentStoreId = $storeManager->getStore()->getId();
+                     
+                    $reviewCollectionFactory = $objectManager->create('Magento\Review\Model\ResourceModel\Review\CollectionFactory')->create();
+                     
+                    // Get reviews collection
+                    $reviewsCollection = $reviewCollectionFactory->addFieldToSelect('*')
+                            ->addStoreFilter($currentStoreId)
+                            ->addStatusFilter(\Magento\Review\Model\Review::STATUS_APPROVED)
+                            ->setDateOrder()
+                            ->addRateVotes();
+
+                ?>
+                <h5 class="product_reviews_title"><?php echo count($reviewsCollection); ?> Reviews for Item <?php echo $currentProudct->getName(); ?> </h5>
+                <ul class="review_lists_wrap">
+                  <?php 
+                      $dateFormat = $block->getDateFormat() ? : \IntlDateFormatter::SHORT;
+                      if ($reviewsCollection && count($reviewsCollection) > 0) {
+                        foreach ($reviewsCollection AS $review) {
+                  ?>
+                  <li class="review_lists_item">
+                    <div class="review_lists_item_top">
+                      <div class="review_lists_item_name"><?php echo $review->getNickname(); ?></div>
+                      <div class="review_lists_item_date"><?php echo $block->formatDate($review->getCreatedAt(), $dateFormat); ?></div>
+                    </div>
+                    <ul class="review_lists_item_rating_wrap">                                         
+                       <?php
+                          $countRatings = count($review->getRatingVotes());
+                          $allRatings = 0;
+                          foreach ($review->getRatingVotes() as $vote) {
+                              $allRatings = $allRatings + $vote->getPercent();
+                          }
+                          $allRatingsAvg = $allRatings / $countRatings;
+                          ?>
+                          <div class="rating-summary">
+                              <div class="rating-result" title="<?php echo $allRatingsAvg; ?>%">
+                                  <meta itemprop="worstRating" content = "1"/>
+                                  <meta itemprop="bestRating" content = "100"/>
+                                  <span style="width:<?php echo $allRatingsAvg; ?>%">
+                                      <span itemprop="ratingValue"><?php echo $allRatingsAvg; ?>%</span>
+                                  </span>
+                              </div>
+                          </div>
+                    </ul>
+                    <p class="review_lists_item_desc"><?php echo $review->getDetail(); ?></p>
+                  </li>
+                  
+                <?php } } ?>
+                </ul>
+              </div>
+              <?php echo $block->getLayout()->createBlock("Magento\Review\Block\Form")->setTemplate('Magento_Review::form.phtml')->toHtml(); ?>
+            </div>
+          </li>
+		  <?php if($customerSession->isLoggedIn()) { ?>
+		  <li class="product_info_tab_content">
+				<?php echo $block->getLayout()->createBlock("Magento\Catalog\Block\Product\View")->setTemplate('Basari_UploadForm::uploadform.phtml')->toHtml(); ?>
+              <div class="prescription_btn_split">
+                  <button class="whatsapp_btn">
+                      <div>Shre on Whatsapp</div>
+                      <div>
+                          <img src="./assets/img/wats.svg" alt="">
+                      </div>
+                  </button>
+                  <a href="/contact" class="Contact_us_btn">Contact us</a>
+              </div>
+          </li>
+		  <?php } else {
+              $referrelUrl = $currentProudct->getProductUrl();
+              $loginUrl = $block->getUrl('customer/account/login', array('referer' => base64_encode($referrelUrl)));?>
+              <li class="product_info_tab_content">
+                  <div class="upload_form">
+                      <p>  Please <a href="<?= $loginUrl; ?>" ></b>Login</b></a> to upload your Prescription </p>
+                  </div>
+              </li>
+         <?php } ?>
+
+        </ul>
+
+      </div>
+
+    </div>
+  </section>
+   <script>
+   require([
+     'jquery'
+   ], function ($) {
+      //additional tab info
+      const infoTabWrapper = document.querySelector(".product_info_tab_wrapper");
+      const infoTab = [...infoTabWrapper.querySelectorAll(" .product_info_tab")];
+      const infoContent = [
+        ...infoTabWrapper.querySelectorAll(".product_info_tab_content "),
+      ];
+      infoTab.forEach((tab) =>
+      tab.addEventListener("click", (e) => {
+        for (product_info_tab_content of infoContent)
+          product_info_tab_content.classList.remove("active");
+        for (product_info_tab of infoTab)
+          product_info_tab.classList.remove("active");
+        const index = infoTab.indexOf(e.target);
+        if (index != -1) {
+          e.target.classList.add("active");
+          infoContent[index].classList.add("active");
+        }
+      })
+    );
+     });
+ </script>

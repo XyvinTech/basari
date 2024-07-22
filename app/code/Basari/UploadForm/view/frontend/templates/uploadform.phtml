@@ -1,0 +1,19 @@
+<?php $productId = $block->getProduct()->getId(); ?>
+<form id="upload-form" name="UploadFrom" enctype='multipart/form-data'  method="post" action="uploadform/customer/uploadfile">
+    <input type="file" name="fileInput" id="fileInput"/>
+
+    <label for="fileInput" id="fileLabel" ondragover="overrideDefault(event);fileHover();" ondragenter="overrideDefault(event);fileHover();" ondragleave="overrideDefault(event);fileHoverEnd();" ondrop="overrideDefault(event);fileHoverEnd();
+					addFiles(event);">
+        <div class="upload_svg"><img src="./assets/img/upload.svg" alt=""></div>
+
+        <span id="fileLabelText">
+				 Drop your file here to upload
+				</span>
+        <span class="file_label_inner_text">or</span>
+        <span class="file_label_browse_text">browse files</span>
+        <br>
+        <span id="uploadStatus"></span>
+    </label>
+    <input type="hidden" name="product_id" id="product_id" value="<?= $productId ?>">
+    <input type="submit" value="Upload" class="uploadButton">
+</form>

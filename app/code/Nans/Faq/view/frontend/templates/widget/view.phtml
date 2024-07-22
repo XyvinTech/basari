@@ -1,0 +1,120 @@
+<?php
+/** @var \Nans\Faq\Block\Widget\Faq $block */
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "questions": {
+                    "component"     : "Nans_Faq/js/faq_model",
+                    "baseUrl"       : "<?php echo $block->getBaseUrl() ?>",
+                    "apiUrl"        : "<?php echo $block->getApiUrl() ?>",
+                    "storeId"       : <?php echo $block->getStoreId() ?>
+                }
+            }
+        }
+    }
+}
+</script>
+<?php 
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+  $categoryCollection = $objectManager->create('Nans\Faq\Model\ResourceModel\Category\CollectionFactory');
+?>
+<section>
+    <div class="main_container img_skeleton skeleton">
+      <h3 class="faq_main_title hide-text">FAQ</h3>
+
+
+      <div class="faq_wrapper">
+        <div class="faq_accordion_wrapper ">
+          <!-- Slider -->
+
+          <ul class="faq_tab_label_wrap product_tab_wrapper skeleton">
+            <?php foreach ($categoryCollection->create()->getData() as $categoryCollectionData) { ?>
+              <li class="faq_tab_label_item hide-s-box"><?php echo $categoryCollectionData['title']; ?></li>
+            <?php } ?> 
+
+          </ul>
+          
+          <?php
+          echo $this->getLayout()
+          ->createBlock('Magento\Cms\Block\Block')
+          ->setBlockId('faq')
+          ->toHtml();
+          ?>  
+
+        </div>
+  </section>
+<div data-bind="scope: 'questions'" style="display: none">
+    <div class="container_faq" style="display: none">
+        <!-- ko if: categories().length > 0 -->
+        <!-- ko foreach: categories -->
+        <h2><span data-bind="text:title"></span></h2>
+        <div class="accordion">
+            <!-- ko foreach: questions -->
+            <div class="accordion-item">
+                <a data-bind="text:title"></a>
+                <div class="content">
+                    <p data-bind="html: content"></p>
+                    <i data-bind="click: setUseful, style: {color: getUsefulColor()}" class="fa fa-thumbs-up">
+                        <span data-bind="text: getUsefulText()"></span></i>&nbsp;
+                    <i data-bind="click: setUseless, style: { color: getUselessColor()}" class="fa fa-thumbs-down">
+                        <span data-bind="text: getUselessText()"></span></i>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko if: dataLoaded() -->
+        <!-- ko if: categories().length < 1 -->
+        <p><?php echo __('Questions and answers was not found'); ?></p>
+        <!-- /ko -->
+        <!-- /ko -->
+    </div>
+
+    <div id="initial_message"><p><?php echo __("Reading data, please wait"); ?></p></div>
+</div>
+<script>
+  require([
+    'jquery',
+    'domReady'
+  ], function ($) {
+    //faq  tab
+const faqcontent = document.querySelectorAll(".faq_list_wrap");
+const faqtab = document.querySelectorAll(".faq_tab_label_item");
+const faqslider = document.querySelector(".faq_tab_label_wrap");
+
+function hidefaqTabContent() {
+  faqcontent.forEach((item) => {
+    item.style.display = "none";
+  });
+  faqtab.forEach((item) => {
+    item.classList.remove("active");
+  });
+}
+
+function showfaqTabContent(i = 0) {
+  faqcontent[i].style.display = "flex";
+  faqtab[i].classList.add("active");
+}
+
+hidefaqTabContent();
+showfaqTabContent();
+
+faqslider.addEventListener("click", (e) => {
+  const target = e.target;
+  if (target) {
+    faqtab.forEach((item, i) => {
+      if (target == item) {
+        hidefaqTabContent();
+        showfaqTabContent(i);
+      }
+    });
+  }
+});
+
+});
+</script>

@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove $block */
+?>
+<div class="wishlist_item_delete_wrap">
+   <button class="cart_item_delete_btn">
+      <a href="#" data-role="remove" data-post-remove='<?= /* @noEscape */ $block->getItemRemoveParams($block->getItem()) ?>' title="<?= $block->escapeHtmlAttr(__('Remove Item')) ?>" class="btn-remove action delete">
+          <img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/delete.svg" />
+      </a>
+   </button>
+</div>  
+

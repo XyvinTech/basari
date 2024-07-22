@@ -1,0 +1,128 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+<?php if ($block->canShowBlock()) : ?>
+<section class="shop_prod_sec">
+    <div class="main_container">
+      <div class="shop_child_wrap" id="layered-filter-block" data-mage-init='
+    {
+        "collapsible":
+        {
+            "openedState": "active",
+            "collapsible": true,
+            "active": false,
+            "collateral":
+            {
+                "openedState": "filter-active",
+                "element": "body"
+            }
+        }
+    }'>
+      <div div class="block-title filter-title">
+        <strong data-role="title">
+          <span class="filter-toggle"><?= $block->escapeHtml(__('Filter By')); ?></span>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <button class="shop_prod_resp_head_filter_btn hide-div" type="button">filter</button>
+        </strong>
+        </div>
+        <div class="shop_filter_wrap skeleton offcanvas">
+          <h5 class="filter_main_title hide-text">Shop The Latest</h5>
+          <div class="filter_search hide-box">
+            <input type="search" />
+            <button class="filter_search_btn"><i class="fas fa-search"></i></button>
+
+          </div>
+          <h6 class="filter_sub_title">Filter by</h6>
+
+
+				<?= $block->getChildHtml('state') ?>
+
+				<?php if ($block->getLayer()->getState()->getFilters()) : ?>
+					<div class="block-actions filter-actions">
+						<a href="<?= $block->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear"><span><?= $block->escapeHtml(__('Clear All')) ?></span></a>
+					</div>
+				<?php endif; ?>
+				<?php $wrapOptions = false; ?>
+				<?php foreach ($block->getFilters() as $filter) : ?>
+					<?php if (!$wrapOptions) : ?>
+						<dl class="filter-options" id="narrow-by-list">
+						<?php $wrapOptions = true;
+					endif; ?>
+						<?php if ($filter->getItemsCount()) : ?>
+							<div class="filter_box">
+			<div class="block-content filter-content">
+							<div class="filter_label_box">
+							  <a class="filter_label_box_child main" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">
+								<?= $block->escapeHtml(__($filter->getName())) ?>
+								<span class="filter_label_box_arrow">
+								  <i class="fas fa-chevron-down"></i>
+								</span>
+							  </a>
+							</div>
+							<div class="collapse show" id="filter">
+								<div class="filter_drop">
+									<?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?>
+								</div>
+							</div>
+							</div>
+		  </div>
+						<?php endif; ?>
+
+				<?php endforeach; ?>
+				<?php if ($wrapOptions) : ?>
+					</dl>
+				<?php endif; ?>
+          <div class="price_filter_wrapper">
+
+            <fieldset class="filter-price">
+
+              <div class="price-field">
+                <input type="range" min="100" max="500" value="100" id="lower">
+                <input type="range" min="100" max="500" value="500" id="upper">
+              </div>
+              <div class="price-wrap">
+                <span class="price-title">FILTER</span>
+                <div class="price-wrap-1">
+                  <input id="one" disabled>
+                  <label for="one">AED</label>
+                </div>
+                <div class="price-wrap_line">-</div>
+                <div class="price-wrap-2">
+                  <input id="two" disabled>
+                  <label for="two">AED</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="filter_stock_wrap">
+            <div>
+              <h6 class="filter_stock_wrap_label">In stock</h6>
+            </div>
+            <div>
+              <input type="checkbox" hidden="hidden" id="username">
+              <label class="switch" for="username"></label>
+            </div>
+
+          </div>
+          <div>
+            <button class="primary_btn w_100">Apply Filters</button>
+            <button class="filter_clear_btn w_100">Clear all</button>
+          </div>
+
+
+        </div>
+
+    <div class="filter-overlay"></div>
+	<?php endif; ?>

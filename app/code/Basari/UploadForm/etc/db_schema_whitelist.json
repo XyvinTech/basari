@@ -1,0 +1,14 @@
+{
+    "product_upload_file": {
+        "column": {
+            "id": true,
+            "title": true,
+            "image": true,
+            "customer_name": true,
+            "customer_email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

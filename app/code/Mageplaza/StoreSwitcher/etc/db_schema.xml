@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="mageplaza_storeswitcher_rules" resource="default" engine="innodb" comment="StoreSwitcher Rules">
+    <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Rule Id"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Rule Name"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="false" identity="false" default="0" comment="Status"/>
+    <column xsi:type="smallint" name="priority" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Priority"/>
+    <column xsi:type="varchar" name="store_ids" nullable="false" length="255" default="0" comment="Store Id"/>
+    <column xsi:type="text" name="countries" nullable="true" comment="Countries"/>
+    <column xsi:type="varchar" name="page_type" nullable="true" length="255" comment="Page Type"/>
+    <column xsi:type="text" name="include_path" nullable="true" comment="Include Url"/>
+    <column xsi:type="text" name="exclude_path" nullable="true" comment="Exclude Url"/>
+    <column xsi:type="text" name="exclude_ips" nullable="true" comment="Exclude Ips"/>
+    <column xsi:type="varchar" name="redirect_type" nullable="true" length="255" comment="Redirect Type"/>
+    <column xsi:type="varchar" name="change_type" nullable="true" length="255" comment="Change Story View Type"/>
+    <column xsi:type="varchar" name="store_redirected" nullable="true" length="255" comment="Redirect Store"/>
+    <column xsi:type="varchar" name="currency" nullable="true" length="255" comment="Currency"/>
+    <column xsi:type="varchar" name="redirect_url" nullable="true" length="255" comment="Redirect Url"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Creation Time"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Update Time"/>
+    <column xsi:type="text" name="ignore_user_agents" nullable="true" comment="List user agents to ignore"/>
+    <column xsi:type="int" name="first_redirect" padding="11" unsigned="false" nullable="true" identity="false" comment="Redirect Only For The First Access Time"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="rule_id"/>
+    </constraint>
+  </table>
+</schema>

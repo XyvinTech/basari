@@ -1,0 +1,139 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var \Magento\Contact\Block\ContactForm $block */
+/** @var \Magento\Contact\ViewModel\UserDataProvider $viewModel */
+
+$viewModel = $block->getViewModel();
+?>
+<div class="contact_section img_skeleton skeleton">
+  <div class="main_container">
+    <h2 class="contact_title hide-text">Let’s stay connected</h2>
+    <p class="contact_desc hide-text">It's never been easier to get in touch with Flex. Call us, use our live chat widget or email and we'll get back to you as soon as possible!</p>
+    <div class="contact_sec_split">
+      <div class="contact_pg_details_wrap">
+        <ul class="contact_pg_details_items hide-div">
+          <li class="contact_pg_details_item">
+            <div class="contact_pg_detail">
+              <div class="contact_pg_details_icon">
+                <img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/cicon1.svg" />
+              </div>
+              <h5 class="contact_pg_details_title">Email</h5>
+            </div>
+            <p class="contact_pg_details_desc">
+              <a href="mailto:info@basariopticals.com">info@basariopticals.com</a>
+            </p>
+          </li>
+          <li class="contact_pg_details_item">
+            <div class="contact_pg_detail">
+              <div class="contact_pg_details_icon">
+                <img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/cicon2.svg" />
+              </div>
+              <h5 class="contact_pg_details_title">Phone</h5>
+            </div>
+            <p class="contact_pg_details_desc">
+              <a href="tel:800 227 274">Toll free : 800 227 274</a>
+            </p>
+          </li>
+          <li class="contact_pg_details_item">
+            <div class="contact_pg_detail">
+              <div class="contact_pg_details_icon">
+                <img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/cicon3.svg" />
+              </div>
+              <h5 class="contact_pg_details_title">Office</h5>
+            </div>
+            <p class="contact_pg_details_desc">Shop # 3,G floor, Roudhat Al, <br>Karama building Al Karama, Dubai UAE </p>
+          </li>
+          <li class="contact_pg_details_item">
+            <div class="contact_pg_detail">
+              <div class="contact_pg_details_icon">
+                <img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/cicon4.svg" />
+              </div>
+              <h5 class="contact_pg_details_title">Socials</h5>
+            </div>
+            <ul class="contact_pg_details_social">
+              <li class="contact_pg_details_social_item">
+                <a href="#" target="_blank">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="contact_pg_details_social_item">
+                <a href="#" target="_blank">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </li>
+              <li class="contact_pg_details_social_item">
+                <a href="#" target="_blank">
+                  <i class="fab fa-youtube"></i>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="contact_form_wrapper">
+        <form class="contact_form_wrap hide-div form contact"
+      action="<?= $block->escapeUrl($block->getFormAction()) ?>"
+      id="contact-form"
+      method="post"
+      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      data-mage-init='{"validation":{}}'>
+      <input name="name"
+                       id="name"
+                       title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
+                       value="<?= $block->escapeHtmlAttr($viewModel->getUserName()) ?>"
+                       class="input-text"
+                       type="text"
+                       placeholder="<?= $block->escapeHtml(__('Name')) ?>"
+                       data-validate="{required:true}"/>
+        <input name="email"
+                       id="email"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                       value="<?= $block->escapeHtmlAttr($viewModel->getUserEmail()) ?>"
+                       class="input-text"
+                       type="email"
+                       placeholder="<?= $block->escapeHtml(__('Email')) ?>"
+                       data-validate="{required:true, 'validate-email':true}"
+                       data-mage-init='{"mage/trim-input":{}}'
+                />
+        <input name="telephone"
+                       id="telephone"
+                       title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                       value="<?= $block->escapeHtmlAttr($viewModel->getUserTelephone()) ?>"
+                       class="input-text"
+                       placeholder="<?= $block->escapeHtml(__('Phone number')) ?>"
+                       type="tel" />
+        <textarea name="comment"
+                          id="comment"
+                          title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
+                          class="input-text"
+                          cols="5"
+                          rows="3"
+                          placeholder="<?= $block->escapeHtml(__('Talk to us')) ?>"
+                          data-validate="{required:true}"
+                ><?= $block->escapeHtml($viewModel->getUserComment()) ?></textarea>
+        <input type="hidden" name="hideit" id="hideit" value="" />
+        <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="primary_btn w_100 action submit primary">
+            <?= $block->escapeHtml(__('CONTACT US')) ?>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "contact-form"
+            }
+        }
+    }
+</script>

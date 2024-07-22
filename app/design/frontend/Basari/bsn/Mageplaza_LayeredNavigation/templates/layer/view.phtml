@@ -1,0 +1,227 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_LayeredNavigation
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+if ($block->canShowBlock()): ?>
+    <?php
+    $filters     = $block->getFilters();
+    $helperData  = $this->helper(\Mageplaza\LayeredNavigation\Helper\Data::class);
+    $layerConfig = $helperData->getLayerConfiguration($filters);
+    $filtered    = count($block->getLayer()->getState()->getFilters());
+    $helperImage = $this->helper(\Mageplaza\LayeredNavigation\Helper\Image::class);
+    $category = $block->getLayer()->getCurrentCategory();
+    $hideAttributes = $category->getData('mp_ln_hide_attribute_ids');
+    ?>
+    <div class="block filter" id="layered-filter-block"
+         data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false, "collateral": { "openedState": "show", "element": ".offcanvas-start" } }}'>
+        <div class="block-title filter-title" data-count="<?= /** @noEscape */ $filtered ?>">
+            <button data-role="title" class="shop_prod_resp_head_filter_btn"><?= /** @noEscape */ __('Filter') ?></button>
+        </div>
+        <div class="block-content offcanvas offcanvas-start filter-content" data-mage-init='{"mpLayer": <?= /** @noEscape */ $block->escapeHtml($layerConfig) ?>}'>
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($filters as $key => $filter): ?>
+                <?php if ($filter->getItemsCount()): ?>
+                    <?php if ($hideAttributes && is_array($hideAttributes) && in_array($filter->getRequestVar(), $hideAttributes, true)) {continue;} ?>
+                    <?php if (!$wrapOptions): ?>
+                        <div class="offcanvas-header">
+                            <h6 role="heading" aria-level="2" class="block-subtitle filter-subtitle filter_sub_title">
+                                <?= /** @noEscape */ __('Filter by') ?>
+                            </h6>
+                            <button type="button" class="btn-close text-reset" aria-label="Close"></button>
+                        </div>
+                        <div class="filter-options" id="narrow-by-list" data-role="content">
+                        <?php $wrapOptions = true;
+                    endif; ?>
+                    <div data-role="ln_collapsible" class="filter_box"
+                         attribute="<?= /** @noEscape */ $filter->getRequestVar() ?>">
+                        <div data-role="ln_title" class="filter_label_box">
+                            <?= /** @noEscape */ __($filter->getName()) ?>
+                            <?php if ($filter->hasAttributeModel()
+                                && $filter->getAttributeModel()->getData('show_tooltip') === '1'): ?>
+                                <?php
+                                    $imageUrl = $helperImage->getTooltipThumbnail($filter);
+                                    $tooltipContent = $helperData->getTooltipContent($filter);
+                                ?>
+                                <span class="ln_tooltip"  data-toggle="tooltip" title="<?= $block->escapeHtml($tooltipContent) ?>">
+                                    <?php if ($imageUrl): ?>
+                                    <image src="<?= $block->escapeUrl($imageUrl) ?>" width="22" height="22"
+                                           class="ln_tooltip_thumbnail"
+                                           alt="<?= $block->escapeHtml($tooltipContent) ?>">
+                                    <?php endif; ?>
+                                </span>
+                            <?php endif; ?>
+                            <span class="filter_label_box_arrow">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div data-role="ln_content" class="collapse">
+                            <div class="filter_drop">
+                                <?php if ($filter instanceof \Mageplaza\LayeredNavigation\Model\Layer\Filter\Category && $filter->isRenderCategoryTree()): ?>
+                                    <?= /** @noEscape */ $block->getChildBlock('mplayer-renderer')->setFilter($filter)->render($filter) ?>
+                                <?php else: ?>
+                                    <?= /** @noEscape */ $block->getChildBlock('renderer')->setFilter($filter)->render($filter) ?>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($wrapOptions): ?>
+                </div>
+            <?php else: ?>
+                <script type="text/javascript">
+                    require([
+                        'jquery'
+                    ], function ($) {
+                        $('#layered-filter-block').addClass('filter-no-options');
+                    });
+                </script>
+            <?php endif; ?>
+            <?= /** @noEscape */ $block->getChildHtml('layer_additional_info') ?>
+
+            <?= /** @noEscape */ $block->getChildHtml('state') ?>
+            <?php if ($block->getLayer()->getState()->getFilters()): ?>
+                <div class="block-actions filter-actions">
+                    <a href="<?= /** @noEscape */ $block->getClearUrl() ?>" style="display:block;text-align: center;" class="action clear filter-clear filter_clear_btn w_100">
+                        <span><?= /** @noEscape */ __('Clear All') ?></span>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php if ($helperData->getHtmlHighLight()) {
+        echo /** @noEscape */ $helperData->getHtmlHighLight($block->getLayout());
+    } ?>
+<?php endif; ?>
+<style>
+    .page-products .columns {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1320px;
+        margin: 20px auto 0;
+    }
+    
+    .shop_product_wrapper {
+        width: 100%;
+    }
+    .filter_label_box_arrow {
+        float: right;
+    }
+    .filter_box.active .filter_label_box_arrow {
+        transform: rotate(180deg);
+    }
+    .filter-current {
+        margin-top: 15px;
+        border: 1px solid #d8d8d8;
+        border-radius: 4px;
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    .filter-current .items li:last-child {
+        margin: 0;
+    }
+    .shop_product_list_wrap {
+        gap: 40px 10px;
+    }
+    @media only screen and (min-width: 768px) {
+        .page-layout-2columns-left .column.main {
+            float: left;
+            width: 78%;
+        }
+        .page-layout-2columns-left .sidebar-main {
+            flex-basis: inherit;
+            padding: 0;
+            width: 22%;
+        }
+        .offcanvas-header button {
+            display: none;
+        }
+        .offcanvas-header {
+            padding: 0 0 10px;
+        }
+        .block.filter .block-content.offcanvas.offcanvas-start.filter-content.mageplaza-layer-disabled {
+            position: static;
+            visibility: visible;
+            width: 100%;
+            transform: none;
+            border: none;
+        }
+        .block.filter .filter-content {
+            position: static;
+            visibility: visible;
+            width: 100%;
+            transform: none;
+            border: none;
+            transition: none;
+        }
+    }
+    @media only screen and (max-width: 767px) {
+        .offcanvas.show {
+            visibility: visible;
+        }
+        .page-products .columns {
+            padding: 20px;
+        }
+        body .block-title.filter-title {
+            margin-bottom: 40px;
+            float: left;
+        }
+        .shop_prod_resp_head_filter_btn {
+            width: 48%;
+            float: right;
+        }
+        .block.filter.active .shop_prod_resp_head_filter_btn:before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1040;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            opacity: 0.5;
+        }
+        .offcanvas.show {
+            padding: 16px;
+            overflow-y: auto;
+            top: 70px;
+        }
+        .filter_sub_title {
+            padding: 0;
+            display: block;
+        }
+        .offcanvas-header {
+            padding: 0 0 16px;
+        }
+        .shop_product_list_wrap {
+            justify-content: space-between;
+        }
+        .block.filter {
+            margin-bottom: 0;
+        }
+    }
+</style>
+<script>
+    require(['jquery', 'jquery/ui'], function($){
+        $('.offcanvas-header .btn-close').click(function() {
+            $('.shop_prod_resp_head_filter_btn').trigger('click')
+        })
+    });
+</script>

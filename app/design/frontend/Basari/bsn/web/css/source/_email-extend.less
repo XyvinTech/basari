@@ -1,0 +1,128 @@
+// /**
+// * Copyright © Vaimo AB. All rights reserved.
+// * See LICENSE_VAIMO.txt for license details.
+// **/
+
+//
+//  Email extend styles
+//  _____________________________________________
+
+//  This file should be used for theme-specific styles for emails that extend or modify the styles in _email.less
+//  This will allow you to edit email styles without copying and editing the _email.less file
+
+//  Importing fonts from an external CSS file, rather than embedding @font-face declarations inside the <style> tag,
+//  as the latter will cause font rendering issues if the web fonts are inaccessible.
+
+@import url("@{baseUrl}css/email-fonts.css");
+
+body {
+    font-size: 12px;
+    background: #f1f1f1;
+}
+
+.main-content {
+    table {
+        margin: auto;
+
+        .item-info {
+            text-align: left;
+        }
+    }
+}
+
+.header {
+    text-align: center;
+}
+
+.intro-email {
+    td {
+        padding: 20px 0;
+    }
+}
+
+.greeting {
+    font-size: 18px;
+    font-weight: @font-weight__bold;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    text-transform: uppercase;
+}
+
+.button {
+    a {
+        border: 0;
+    }
+
+    .inner-wrapper a {
+        border: 0 none !important;
+    }
+}
+
+.footer {
+    padding-top: 20px;
+    text-align: center;
+}
+
+.product {
+    text-align: center;
+    max-width: 150px;
+
+    a {
+        color: #826fc9 !important;
+
+        &:hover {
+            color: inherit !important;
+        }
+    }
+}
+
+.email-non-inline() {
+
+    .product {
+        a {
+            &:visited,
+            &:hover,
+            &:active {
+                color: #826fc9;
+            }
+        }
+
+        p:last-child {
+            a {
+                color: @link__color;
+                a:hover {
+                    color: @link__color;
+                }
+            }
+        }
+    }
+}
+
+//Styling email items order table
+.email-items {
+    font-size: @font-size__base;
+
+    > thead {
+        > tr > th {
+            background-color: @color-black;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 10px;
+        }
+    }
+
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                background-color: @color-black;
+                padding: 5px 10px;
+                text-align: right;
+            }
+        }
+    }
+}

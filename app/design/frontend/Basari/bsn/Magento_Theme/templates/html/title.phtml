@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Theme\Block\Html\Title
+ */
+$cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
+$titleHtml = '';
+if (trim($block->getPageHeading())) {
+    $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
+        . $block->getAddBaseAttribute()
+        . '>'
+        . $block->escapeHtml($block->getPageHeading())
+        . '</span>';
+}
+?>
+<?php if ($titleHtml) : ?>
+<?php if($block->escapeHtmlAttr($block->getId())) { ?>
+<div class="img_skeleton skeleton"> 
+    <div class="shop_banner l-box"> 
+        <h2 class="shop_banner_title "><?= /* @noEscape */ $titleHtml ?></h2> 
+    </div> 
+</div>
+<?php } else { if($cssClass == ' product') {?>
+<div class="img_skeleton skeleton">
+    <h1 class="product_name">
+        <?= /* @noEscape */ $titleHtml ?>
+    </h1>
+</div>    
+<?php } } ?>
+
+<?php endif; ?>

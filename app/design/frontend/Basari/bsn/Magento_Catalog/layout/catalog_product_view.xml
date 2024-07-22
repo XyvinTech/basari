@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<css src="css/upload.css" rel="stylesheet" type="text/css"  />
+	</head>
+    <body>
+		<referenceBlock name="product.info.social" remove="true" />
+		<referenceBlock name="breadcrumbs" remove="true" />
+        <referenceBlock name="reviews.tab" remove= "true"/>		
+		<move element="product.info.media" destination="main.row" before="-"/>
+        <move element="product.info.main" destination="main.row"/>
+	<!-- 	<referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="css_class" xsi:type="string">product</argument>
+                <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
+            </arguments>
+        </referenceBlock> -->
+		<referenceBlock name="product.info.addto">
+		   <block class="Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist" name="view.addto.wishlist" template="Magento_Wishlist::catalog/product/view/addto/wishlist.phtml" />
+		</referenceBlock>
+		<referenceContainer name="page.wrapper">
+			<referenceContainer name="content">
+				<container name="main.row" as="main-row" label="Main Row" htmlTag="div" htmlClass="main-row img_skeleton skeleton" htmlId="main-row" before="-"/>
+	                <block after="product.info.details" class="Magento\Catalog\Block\Product\View\Description" name="extra" template="Magento_Catalog::product_info_tab.phtml" />
+			</referenceContainer>
+		</referenceContainer><!--
+		<referenceBlock name="product.info.details">
+			<block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="product/view/attribute.phtml" group="detailed_info">
+				<arguments>
+				<argument name="at_call" xsi:type="string">getDescription</argument>
+				<argument name="at_code" xsi:type="string">description</argument>
+				<argument name="css_class" xsi:type="string">description</argument>
+				<argument name="at_label" xsi:type="string">none</argument>
+				<argument name="title" translate="true" xsi:type="string">Product Details</argument>
+				</arguments>
+			</block>
+		</referenceBlock>	--> 
+				
+		<referenceContainer name="page.bottom.container">
+        </referenceContainer>
+        <move element="scommerce_tracking_data" destination="content" before="-" />
+        <move element="scommerce_tracking_base_product_view" destination="content" after="scommerce_tracking_data" />
+        
+        <move element="google_tag_manager_pro_cookies" destination="content" after="scommerce_tracking_base_product_view" />
+        <move element="google_tag_manager_pro_js" destination="content" after="scommerce_tracking_base_product_view" />
+    </body>
+</page>

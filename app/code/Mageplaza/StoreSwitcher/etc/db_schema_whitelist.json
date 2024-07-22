@@ -1,0 +1,28 @@
+{
+    "mageplaza_storeswitcher_rules": {
+        "column": {
+            "rule_id": true,
+            "name": true,
+            "status": true,
+            "priority": true,
+            "store_ids": true,
+            "countries": true,
+            "page_type": true,
+            "include_path": true,
+            "exclude_path": true,
+            "exclude_ips": true,
+            "redirect_type": true,
+            "change_type": true,
+            "store_redirected": true,
+            "currency": true,
+            "redirect_url": true,
+            "created_at": true,
+            "updated_at": true,
+            "ignore_user_agents": true,
+            "first_redirect": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

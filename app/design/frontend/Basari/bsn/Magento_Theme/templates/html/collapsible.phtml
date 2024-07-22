@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php  $request = $block->getRequest();
+ $fullActionName = $request->getFullActionName();
+?>
+<section class="my_account_pg">
+    <div class="main_container img_skeleton skeleton">	
+		<div class="my_account_tab_label_wrap hide-div block <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>">
+			<div class="title <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-title"
+				 data-mage-init='{"toggleAdvanced": {"toggleContainers": "#<?= $block->escapeHtmlAttr($block->getBlockCss()) ?>", "selectorsToggleClass": "active"}}'>
+				<strong>
+					<?= $block->escapeHtml(__($block->getBlockTitle())) ?>
+				</strong>
+			</div>
+			<div class="main_container content <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-content"
+				 id="<?= $block->escapeHtmlAttr($block->getBlockCss()) ?>">
+				<?= $block->getChildHtml() ?>
+			</div>					
+		</div>
+		<div class="mob_dashboard_select hide-div">
+	          <select class="form-select" aria-label="Default select example" onchange="location = this.value;">
+	            <option value="https://magento-920116-4739515.cloudwaysapps.com/customer/account/" <?php if($fullActionName == 'customer_account_index') { echo "selected"; }?> >dashboard</option>
+	            <option value="https://magento-920116-4739515.cloudwaysapps.com/sales/order/history/" <?php if($fullActionName == 'sales_order_history') { echo "selected"; }?>>orders </option>
+	            <option value="https://magento-920116-4739515.cloudwaysapps.com/customer/address/" <?php if($fullActionName == 'customer_address_form') { echo "selected"; }?>>Addresses popular</option>
+	            <option value="https://magento-920116-4739515.cloudwaysapps.com/customer/account/edit/" <?php if($fullActionName == 'customer_account_edit') { echo "selected"; }?>>Account details </option>
+	            <option value="https://magento-920116-4739515.cloudwaysapps.com/customer/account/logout/">Logout</option>
+	          </select>
+        </div>	
+	</div>	
+
+
+  
+

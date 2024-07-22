@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block Magento\Catalog\Block\Product\View */
+?>
+<?php
+$required = '';
+if ($block->hasRequiredOptions()) {
+    $required = ' data-hasrequired="' . $block->escapeHtmlAttr(__('* Required Fields')) . '"';
+}
+?>
+<div class="product-options-wrapper" id="product-options-wrapper"<?= /* @noEscape */ $required ?>>
+    <div class="fieldset" tabindex="0">
+        <?= $block->getChildHtml('', true) ?>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'jquery/ui',
+       ], function ($) {
+           $(window).on('load', function() {
+             $(".swatch-attribute-label-gender").click(function(){
+                    $(".swatch-attribute-options-gender").toggle();
+                  });
+                
+                $(".swatch-attribute-label-frame_size").click(function(){
+                    console.log('calling-size');
+                     $(".swatch-attribute-options-frame_size").toggle();
+                  });
+            });
+       /* $(".swatch-attribute-label-color").click(function(){
+            $(".swatch-attribute-options-color").toggle();
+          }); */
+    });
+</script>
+

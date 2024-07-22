@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**  @var $block \Magento\Checkout\Block\Cart */
+?>
+<div class="order_thank_you_section">
+    <div class="main_container img_skeleton skeleton">
+      <div class="order_thank_you_wrap hide-div">
+        <div class="order_thank_you_img"><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/emptycart.svg" /></div>
+        <div class="order_thank_you_confirmed">Your Cart is Empty</div>
+         <p class="order_thank_you_msg">Looks like you haven’t added anything to your cart yet</p>
+         <?= $block->escapeHtml(
+        __(
+            '<a href="%1" class="primary_btn w_100">Continue Shopping.</a>',
+            $block->escapeUrl($block->getContinueShoppingUrl())
+        ),
+        ['a']
+    ) ?>
+      </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Checkout/js/empty-cart": {}
+    }
+}
+</script>

@@ -1,0 +1,133 @@
+#upload-form {
+  margin: 16px 16px 30px 16px;
+  text-align: center;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: 0.5s;
+  width: 700px;
+}
+
+#upload-form #fileLabel {
+  background-color: transparent;
+  display: block;
+  padding: 16px;
+  position: relative;
+  cursor: pointer;
+  border: 2px dashed #87898e;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  padding: 35px 35px;
+}
+
+#upload-form #fileInput {
+  display: none;
+}
+
+#upload-form #fileLabel:after,
+#upload-form #fileLabel:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: -2;
+  border-radius: 8px 8px 0 0;
+}
+
+#upload-form #fileLabel:before {
+  z-index: -1;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 5%,
+    black 5%,
+    black 10%
+  );
+  opacity: 0;
+  transition: 0.5s;
+}
+
+#upload-form.fileHover #fileLabel:before {
+  opacity: 0.25;
+}
+
+#upload-form .uploadButton {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  padding: 12px 8px;
+  background: #e0e0e0;
+  border-radius: 0 0px 12px 12px;
+  color: #4f4f4f;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+#upload-form.fileHover {
+  box-shadow: 0 0 16px limeGreen;
+}
+.file_label_inner_text {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #87898e;
+  display: block;
+}
+.file_label_browse_text {
+  font-weight: 400;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: #826fc9;
+  text-transform: capitalize;
+}
+#fileLabelText {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  color: #87898e;
+  display: block;
+}
+.prescription_btn_split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.whatsapp_btn {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: #27ae60;
+  border-radius: 4px;
+  padding: 16px 16px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: pointer;
+  border: none;
+}
+.Contact_us_btn {
+  background: #e0e0e0;
+  border-radius: 4px;
+  padding: 18px 26px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #333333;
+  cursor: pointer;
+  border: none;
+}
+.upload_svg {
+  margin-bottom: 10px;
+}
+@media only screen and (max-width: 768px) {
+  #dropFileForm {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+}

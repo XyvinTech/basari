@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
+<!-- thank you -->
+  <div class="order_thank_you_section">
+    <div class="main_container img_skeleton skeleton">
+      <div class="order_thank_you_wrap hide-div">
+        <div class="order_thank_you_img"><img src="https://magento-920116-4739515.cloudwaysapps.com/media/theme/basari/thank.svg" /></div>
+        <div class="order_thank_you_confirmed">Your order is confirmed!</div>
+        <div class="order_thank_you_id test">
+            <?php if ($block->getOrderId()) :?>
+                <?php if ($block->getCanViewOrder()) :?>
+                    <p class="1"><?= $block->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $block->escapeUrl($block->getViewOrderUrl()), $block->getOrderId())), ['a', 'strong']) ?></p>
+                <?php  else :?>
+                    <p class="2"><?= $block->escapeHtml(__('Your order # is: <span>%1</span>.', $block->getOrderId()), ['span']) ?></p>
+                <?php endif;?>
+                    <p class="3"><?= $block->escapeHtml(__('We\'ll email you an order confirmation with details and tracking info.')) ?></p>
+            <?php endif;?>
+
+            <?= $block->getAdditionalInfoHtml() ?>
+        </div>
+        <p class="order_thank_you_msg test123">You will be recieving a confirmation email with order details</p>
+        <a href="<?= $block->escapeUrl($block->getContinueUrl()) ?>" class="primary_btn w_100 testdone"><?= $block->escapeHtml(__('Continue Shopping')) ?></a>
+      </div>
+    </div>
+  </div>
+

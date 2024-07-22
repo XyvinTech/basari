@@ -1,0 +1,257 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
+use Magento\Framework\App\ActionInterface;
+
+/* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+switch ($type = $block->getType()) {
+
+    case 'related-rule':
+        if ($exist = $block->hasItems()) {
+            $type = 'related';
+            $class = $type;
+
+            $image = 'related_products_list';
+            $title = __('SIMILAR PRODUCTS');
+            $items = $block->getAllItems();
+            $limit = $block->getPositionLimit();
+            $shuffle = (int) $block->isShuffled();
+            $isWeightedRandom = (int) $block->getRotation()->isWeightedRandom($block->getProductListType());
+            $canItemsAddToCart = $block->canItemsAddToCart();
+
+            $showAddTo = true;
+            $showCart = false;
+            $templateType = null;
+            $description = false;
+        }
+        break;
+
+    case 'related':
+        /** @var \Magento\Catalog\Block\Product\ProductList\Related $block */
+        if ($exist = $block->getItems()->getSize()) {
+            $type = 'related';
+            $class = $type;
+
+            $image = 'related_products_list';
+            $title = __('SIMILAR PRODUCTS');
+            $items = $block->getItems();
+            $limit = 0;
+            $shuffle = 0;
+            $isWeightedRandom = 0;
+            $canItemsAddToCart = $block->canItemsAddToCart();
+
+            $showAddTo = true;
+            $showCart = false;
+            $templateType = null;
+            $description = false;
+        }
+        break;
+
+    case 'upsell-rule':
+        if ($exist = $block->hasItems()) {
+            $type = 'upsell';
+            $class = $type;
+
+            $image = 'upsell_products_list';
+            $title = __('We found other products you might like!');
+            $items = $block->getAllItems();
+            $limit = $block->getPositionLimit();
+            $shuffle = (int) $block->isShuffled();
+            $isWeightedRandom = (int) $block->getRotation()->isWeightedRandom($block->getProductListType());
+
+            $showAddTo = false;
+            $showCart = false;
+            $templateType = null;
+            $description = false;
+            $canItemsAddToCart = false;
+        }
+        break;
+
+    case 'upsell':
+        /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $block */
+        if ($exist = count($block->getItemCollection()->getItems())) {
+            $type = 'upsell';
+            $class = $type;
+
+            $image = 'upsell_products_list';
+            $title = __('We found other products you might like!');
+            $items = $block->getItemCollection()->getItems();
+            $limit = $block->getItemLimit('upsell');
+            $shuffle = 0;
+            $isWeightedRandom = 0;
+
+            $showAddTo = false;
+            $showCart = false;
+            $templateType = null;
+            $description = false;
+            $canItemsAddToCart = false;
+        }
+        break;
+
+    case 'crosssell-rule':
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
+        if ($exist = $block->hasItems()) {
+            $type = 'crosssell';
+            $class = $type;
+
+            $image = 'cart_cross_sell_products';
+            $title = __('More Choices:');
+            $items = $block->getItemCollection();
+
+            $showAddTo = true;
+            $showCart = true;
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+            $description = false;
+            $canItemsAddToCart = false;
+        }
+        break;
+
+    case 'crosssell':
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $block */
+        if ($exist = count($block->getItems())) {
+            $type = 'crosssell';
+            $class = $type;
+
+            $image = 'cart_cross_sell_products';
+            $title = __('More Choices:');
+            $items = $block->getItems();
+
+            $showAddTo = true;
+            $showCart = true;
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+            $description = false;
+            $canItemsAddToCart = false;
+        }
+        break;
+
+    case 'new':
+        if ($exist = $block->getProductCollection()) {
+            $type = 'new';
+            $mode = 'grid';
+            $type = $type . ' ' . $mode;
+
+            $class = 'widget' . ' ' . $type;
+
+            $image = 'new_products_content_widget_grid';
+            $title = __('New Products');
+            $items = $exist;
+
+            $showAddTo = true;
+            $showCart = true;
+            $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+            $description = ($mode == 'list') ? true : false;
+            $canItemsAddToCart = false;
+        }
+        break;
+
+    default:
+        $exist = null;
+}
+$_item = null;
+?>
+<section>
+    <?php if ($exist):?>
+
+    <?php if ($type == 'related' || $type == 'upsell'):?>
+    <div class="main_container product_card skeleton">
+      <h4 class="related_prod_title hide-text">Similar Products</h4>
+      <!-- <ul class="related_products_wrap">
+        <?php foreach ($items as $_item):?>
+            <li class="related_product_item">
+              <div class="related_product_item_img_wrap hide-img">
+                <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product photo product-item-photo">
+                                                            <?= $block->getImage($_item, $image)->toHtml() ?>
+                                                        </a>
+                <button class="product_item_wishlist_btn">
+                  <div class="wishlist">
+                    <a href="<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>"><i class="far fa-heart"></i></a>
+                  </div>
+                  <div class="wishlisted">
+                    <a href="<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>"><i class="fas fa-heart"></i></a>
+                  </div>
+                </button>
+              </div>
+              <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="related_product_item_child">
+
+                <h3 class="home_product_name hide-text"><?= $block->escapeHtml($_item->getName()) ?></h3>
+                <?= /* @noEscape */ $block->getProductPrice($_item) ?>
+              </a>
+            </li>
+        <?php endforeach ?>
+      </ul> -->
+            <div class="owl-carousel owl-theme carousel3">
+            <?php foreach ($items as $_item):?>
+                <li class="related_product_item item">
+                    <div class="related_product_item_img_wrap hide-img">
+                        <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="product photo product-item-photo">
+                                                                    <?= $block->getImage($_item, $image)->toHtml() ?>
+                                                                </a>
+                        <button class="product_item_wishlist_btn">
+                        <div class="wishlist">
+                            <a href="<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>"><i class="far fa-heart"></i></a>
+                        </div>
+                        <div class="wishlisted">
+                            <a href="<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($_item) ?>"><i class="fas fa-heart"></i></a>
+                        </div>
+                        </button>
+                    </div>
+                    <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="related_product_item_child">
+
+                        <h3 class="home_product_name hide-text"><?= $block->escapeHtml($_item->getName()) ?></h3>
+                        <?= /* @noEscape */ $block->getProductPrice($_item) ?>
+                    </a>
+                </li>
+                <!-- <div class="item">111</div> -->
+            <?php endforeach ?>
+            </div>
+    </div>
+<?php endif;?>
+        <?php endif;?>
+  </section>
+
+<script>
+    var x = require();
+    require(['jquery', 'owlcarousel'], function ($) {
+        $(document).ready(function () {
+
+            var owl = $(".carousel3");
+            owl.owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: false,
+                dots: false,
+                items : 4,
+                responsive: {
+                    0: {
+                        items: 2
+                    },
+                    576: {
+                        items: 2
+                    },
+                    768: {
+                        items: 3
+                    },
+                    1200: {
+                        items: 4
+                    }
+                }
+                // itemsCustom : false,
+                // itemsDesktop : [1199, 3],
+                // itemsDesktopSmall : [979, 2],
+                // itemsTablet : [767, 2],
+                // itemsTabletSmall : [575, 1],
+                // itemsMobile : [479, 1],
+                // singleItem : false,
+                // itemsScaleUp : false,
+            });
+        });
+    });
+</script>

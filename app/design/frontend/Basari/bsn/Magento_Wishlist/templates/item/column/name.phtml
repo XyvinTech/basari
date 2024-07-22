@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info $block */
+
+/** @var \Magento\Wishlist\Model\Item $item */
+$item = $block->getItem();
+$product = $item->getProduct();
+?>
+
+<div class="wishlist_item_main">
+    <div class="wishlist_item_details">
+        <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>" class="cart_product_name" title="<?= $block->escapeHtmlAttr($product->getName()) ?>">
+		    <?= $block->escapeHtml($product->getName()) ?> 
+        </a>
+         

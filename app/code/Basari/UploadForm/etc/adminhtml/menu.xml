@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Basari_UploadForm::fileupload" title="Basari Upload"
+             module="Basari_UploadForm" sortOrder="51" resource="Basari_UploadForm::fileupload"/>
+        <add id="Basari_UploadForm::filelist" title="Uploaded files"
+             module="Basari_UploadForm" sortOrder="10" action="uploadform/filelist"
+             resource="Basari_UploadForm::filelist" parent="Basari_UploadForm::fileupload"/>
+    </menu>
+</config>

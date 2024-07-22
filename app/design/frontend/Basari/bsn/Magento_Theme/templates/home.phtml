@@ -1,0 +1,469 @@
+ <?php 
+		//echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('sllider-1')->toHtml();
+		//{{block class="\Sparsh\Banner\Block\Banner" template="Sparsh_Banner::banner.phtml"}} 
+		
+		//echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('basari_banner')->toHtml();
+	?>
+ <div class="hero_section img_skeleton skeleton">
+   <?php 
+		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('basari_banner')->toHtml();
+	?>
+ </div>
+ <section class="shop_by_shape_section">
+   <?php 
+		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('shop_by_section')->toHtml();
+	?>
+ </section>
+
+ <section class="shop_by_category img_skeleton skeleton">
+  <div class="main_container">
+     <h3 class="primary_heading">Shop by Category</h3>    
+     <?php 
+  		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('shop_by_category')->toHtml();
+  	?>
+  </div>  
+ </section>
+ <section class="ad_banner_section img_skeleton skeleton">
+   <?php 
+		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('home_skeleton_banner')->toHtml();
+	?>
+ </section>
+ <!-- brands -->
+ <section class="brands_section img_skeleton skeleton">
+   <?php 
+		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('home_skeleton_brand')->toHtml();
+	?>
+ </section>
+ <!-- featured collection -->
+ <section class="featured_collection_ads_section img_skeleton skeleton">
+   <?php 
+		echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('home_feature_collection')->toHtml();
+	?>
+ </section>
+ <!-- product tabs -->
+ <section class="home_product_tab_section">
+   <div class="main_container">
+     <div class="prod_tab_desk">
+       <!-- Slider -->
+       <ul class="product_tab_label_wrap product_tab_wrapper skeleton">
+         <li class="product_tab_label_item hide-s-box">most popular</li>
+         <li class="product_tab_label_item hide-s-box">most rated</li>
+         <!--
+         <li class="product_tab_label_item hide-s-box">most popular</li><li class="product_tab_label_item hide-s-box">most popular</li> -->
+       </ul>
+       <!-- most popular -->
+       <ul class="home_product_wrap product_card skeleton"> <?php
+         $prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
+         $mostRatedArray = $prouductHelper->getMostPopularProduct();
+          foreach ($mostRatedArray as $mostRated) {
+            $sku = $mostRated['sku'];
+            $regularPrice = $mostRated->getPrice();
+            $specialPrice = $mostRated->getSpecialPrice();
+            $savePrice = $regularPrice - $specialPrice;
+
+            if($regularPrice > 0) {
+               $savePercentage =  ($savePrice * 100) / $regularPrice;
+            } else {
+               $savePercentage = 0;
+            }
+
+
+         //   $savePrice =  $mostRated->getPrice() - $mostRated->getSpecialPrice();            
+          //  $savePercentage =  ($savePrice * 100) / $mostRated->getPrice();
+            $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+                    ->init($mostRated, 'product_base_image')
+                    ->constrainOnly(true)
+                    ->keepAspectRatio(true)
+                    ->keepTransparency(true)
+                    ->keepFrame(false)
+                    ->resize(300, 300)->getUrl();
+      ?> <li class="home_product_item ">
+           <div class="home_product_item_img_wrap hide-img">
+             <a href="<?php echo $mostRated->getProductUrl(); ?>" class="">
+               <span class="home_product_discount"><?php echo number_format($savePercentage, '0', '.', ',') .'%'; ?></span>
+               <img class="product-image-photo" src="
+                <?php echo $imageUrl; ?>" />
+             </a>
+             <button class="product_item_wishlist_btn">
+               <div class="wishlist">
+                 <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+               </div>
+               <div class="wishlisted">
+                 <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+               </div>
+             </button>
+           </div>
+           <a href="<?php echo $mostRated->getProductUrl(); ?>" class="home_product_item_child">
+             <h3 class="home_product_name hide-text"> <?php echo $mostRated->getName(); ?> </h3>
+           
+             <div class="home_product_item_price hide-price-text">
+               <?php if ($regularPrice !== null): ?>
+                  <div class="home_product_item_actual_price">
+                     AED <?php echo number_format($regularPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+               <?php if ($specialPrice !== null): ?>
+                  <div class="home_product_item_sale_price">
+                     AED <?php echo number_format($specialPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+            </div>
+            <?php if ($savePrice !== null): ?>
+               <div class="home_product_item_save_amount hide-sub-text">
+                  save AED <?php echo number_format($savePrice, '2', '.', ','); ?> (<?php echo number_format($savePercentage, '2', '.', ','); ?>%)
+               </div>
+            <?php endif; ?>
+           
+            </a>
+           
+         </li> <?php  } ?> </ul>
+       <!-- most rated -->
+       <ul class="home_product_wrap"> <?php
+         //$prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
+         $getMostRatedProduct = $prouductHelper->getMostRatedProduct();
+          foreach ($getMostRatedProduct as $mostRated) {
+            $sku = $mostRated['sku'];
+          //  $savePrice = $mostRated->getPrice() - $mostRated->getSpecialPrice();
+          $regularPrice = $mostRated->getPrice();
+          $specialPrice = $mostRated->getSpecialPrice();
+          $savePrice = $regularPrice - $specialPrice;
+
+          if($regularPrice > 0) {
+             $savePercentage =  ($savePrice * 100) / $regularPrice;
+          } else {
+             $savePercentage = 0;
+          }
+
+          //  $savePercentage =  ($savePrice * 100) / $mostRated->getPrice();
+            $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+                    ->init($mostRated, 'product_base_image')
+                    ->constrainOnly(true)
+                    ->keepAspectRatio(true)
+                    ->keepTransparency(true)
+                    ->keepFrame(false)
+                    ->resize(300, 300)->getUrl();        
+      ?> <li class="home_product_item ">
+           <div class="home_product_item_img_wrap hide-img">
+             <a href="<?php echo $mostRated->getProductUrl(); ?>" class="">
+               <span class="home_product_discount"><?php echo number_format($savePercentage, '0', '.', ',') .'%'; ?></span>
+               <img class="product-image-photo" src="
+                  <?php echo $imageUrl; ?>" />
+             </a>
+             <button class="product_item_wishlist_btn">
+               <div class="wishlist">
+                 <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+               </div>
+               <div class="wishlisted">
+                 <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+               </div>
+             </button>
+           </div>
+           <a href="<?php echo $mostRated->getProductUrl(); ?>" class="home_product_item_child">
+             <h3 class="home_product_name hide-text"> <?php echo $mostRated->getName(); ?> </h3>
+             <div class="home_product_item_price hide-price-text">
+               <?php if ($regularPrice !== null): ?>
+                  <div class="home_product_item_actual_price">
+                     AED <?php echo number_format($regularPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+               <?php if ($specialPrice !== null): ?>
+                  <div class="home_product_item_sale_price">
+                     AED <?php echo number_format($specialPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+            </div>
+            <?php if ($savePrice !== null): ?>
+               <div class="home_product_item_save_amount hide-sub-text">
+                  save AED <?php echo number_format($savePrice, '2', '.', ','); ?> (<?php echo number_format($savePercentage, '2', '.', ','); ?>%)
+               </div>
+            <?php endif; ?></a>
+         </li> <?php } ?> </ul>
+       <!-- featured -->
+       <!--
+       <ul class="home_product_wrap"><li class="home_product_item "><div class="home_product_item_img_wrap hide-img"><a href="product-detail.html" class=""><span class="home_product_discount">-21%</span><img class="" src="assets/img/prodimg.png" /></a><button class="product_item_wishlist_btn"><div class="wishlist"><i class="far fa-heart"></i></div><div class="wishlisted"><i class="fas fa-heart"></i></div></button></div><a href="product-detail.html" class="home_product_item_child"><h3 class="home_product_name hide-text">item 3896</h3><div class="home_product_item_price hide-price-text"><div class="home_product_item_actual_price ">AED 49,00</div><div class="home_product_item_sale_price ">AED 20.00</div></div><div class="home_product_item_save_amount hide-sub-text">save AED 29.00</div></a></li></ul>
+        -->
+       <!-- most popular -->
+       <!--
+       <ul class="home_product_wrap"><li class="home_product_item "><div class="home_product_item_img_wrap hide-img"><a href="product-detail.html" class=""><span class="home_product_discount">-21%</span><img class="" src="assets/img/prodimg.png" /></a><button class="product_item_wishlist_btn"><div class="wishlist"><i class="far fa-heart"></i></div><div class="wishlisted"><i class="fas fa-heart"></i></div></button></div><a href="product-detail.html" class="home_product_item_child"><h3 class="home_product_name hide-text">item 3896</h3><div class="home_product_item_price hide-price-text"><div class="home_product_item_actual_price ">AED 49,00</div><div class="home_product_item_sale_price ">AED 20.00</div></div><div class="home_product_item_save_amount hide-sub-text">save AED 29.00</div></a></li></ul></div>
+    -->
+       <div class="dont_show">
+         <h3 class="primary_heading">Featured Brands</h3>
+         <ul class="home_product_mob_wrap product_card skeleton"> <?php
+           //$prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
+           $mostRatedArray = $prouductHelper->getMostPopularProduct();
+            foreach ($mostRatedArray as $mostRated) {
+              $sku = $mostRated['sku'];
+            //  $savePrice = $mostRated->getPrice() - $mostRated->getSpecialPrice();
+            $regularPrice = $mostRated->getPrice();
+            $specialPrice = $mostRated->getSpecialPrice();
+            $savePrice = $regularPrice - $specialPrice;
+
+            if($regularPrice > 0) {
+               $savePercentage =  ($savePrice * 100) / $regularPrice;
+            } else {
+               $savePercentage = 0;
+            }
+
+            //  $savePercentage =  ($savePrice * 100) / $mostRated->getPrice();
+              $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+                      ->init($mostRated, 'product_base_image')
+                      ->constrainOnly(true)
+                      ->keepAspectRatio(true)
+                      ->keepTransparency(true)
+                      ->keepFrame(false)
+                      ->resize(300, 300)->getUrl();
+        ?> <li class="home_product_item ">
+             <div class="home_product_item_img_wrap hide-img">
+               <a href="<?php echo $mostRated->getProductUrl(); ?>" class="">
+                 <span class="home_product_discount"><?php echo number_format($savePercentage, '0', '.', ',') .'%'; ?></span>
+                 <img class="product-image-photo" src="
+                      <?php echo $imageUrl; ?>" />
+               </a>
+               <button class="product_item_wishlist_btn">
+                 <div class="wishlist">
+                   <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+                 </div>
+                 <div class="wishlisted">
+                   <a href="#" data-post='<?php  echo $this->helper('Magento\Wishlist\Helper\Data')->getAddParams($mostRated) ?>' class="action towishlist" data-action="add-to-wishlist"><i class="far fa-heart"></i></a>
+                 </div>
+               </button>
+             </div>
+             <a href="<?php echo $mostRated->getProductUrl(); ?>" class="home_product_item_child">
+             <h3 class="home_product_name hide-text"> <?php echo $mostRated->getName(); ?> </h3>
+             <div class="home_product_item_price hide-price-text">
+               <?php if ($regularPrice !== null): ?>
+                  <div class="home_product_item_actual_price">
+                     AED <?php echo number_format($regularPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+               <?php if ($specialPrice !== null): ?>
+                  <div class="home_product_item_sale_price">
+                     AED <?php echo number_format($specialPrice, '2', '.', ','); ?>
+                  </div>
+               <?php endif; ?>
+            </div>
+            <?php if ($savePrice !== null): ?>
+               <div class="home_product_item_save_amount hide-sub-text">
+                  save AED <?php echo number_format($savePrice, '2', '.', ','); ?> (<?php echo number_format($savePercentage, '2', '.', ','); ?>%)
+               </div>
+            <?php endif; ?></a>
+           </li> <?php } ?> </ul>
+       </div>
+     </div>
+	 </div>
+ </section>
+ <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+<div class="elfsight-app-840a8943-aaaf-4073-aa5d-b26730bf6652" data-elfsight-app-lazy></div>
+<?php
+echo $this->getLayout()
+    ->createBlock(\Mageplaza\Productslider\Block\MostViewedProducts::class)
+    ->setTemplate('Mageplaza_Productslider::productslider.phtml')
+    ->toHtml();
+?>
+
+
+ <script>
+   var x = require();
+   require(['jquery', 'owlcarousel'], function ($) {
+     $(document).ready(function () {
+       var owl = $(".carousel2");
+       owl.owlCarousel({
+         items: 1,
+        //  itemsTablet: [1200, 1],
+         navigation: false,
+         nav: false,
+         dots: false,
+         loop: true,
+         autoplay: true,
+         autoplayTimeout: 4000,
+         autoplayHoverPause: true,
+         //  itemElement: 'LI',
+         // stageElement: 'UL'
+       });
+
+       var owl = $(".carousel1");
+       owl.owlCarousel({
+         loop: true,
+         margin: 0,
+         nav: false,
+         dots: false,
+		 loop: true,
+         autoplay: true,
+         items: 5,
+        //  itemsDesktopSmall: [992, 3],
+        //  itemsTablet: [768, 3],
+        //  itemsMobile: [479, 3],
+         responsive: {
+           0: {
+             items: 3
+           },
+           600: {
+             items: 3
+           },
+           1000: {
+             items: 5
+           }
+         }
+       });
+     });
+   });
+ </script>
+ <script>
+   require([
+     'jquery'
+   ], function ($) {
+     //skeleton animation
+     const skeletons = document.querySelectorAll(".product_card");
+
+     skeletons.forEach((skeletons) => {
+       setTimeout(() => {
+         skeletons.classList.remove("skeleton");
+
+         skeletons
+           .querySelectorAll(".hide-img")
+           .forEach((el) => el.classList.remove("hide-img"));
+         skeletons
+           .querySelectorAll(".hide-text")
+           .forEach((el) => el.classList.remove("hide-text"));
+       }, 3000);
+     });
+
+     const filter = document.querySelectorAll(".shop_filter_wrap");
+
+     filter.forEach((filter) => {
+       setTimeout(() => {
+         filter.classList.remove("skeleton");
+
+         filter
+           .querySelectorAll(".hide-img")
+           .forEach((el) => el.classList.remove("hide-img"));
+         filter
+           .querySelectorAll(".hide-text")
+           .forEach((el) => el.classList.remove("hide-text"));
+       }, 3000);
+     });
+
+     const productTab = document.querySelectorAll(".product_tab_wrapper");
+     console.log("productTab", productTab);
+
+     productTab.forEach((productTab) => {
+       setTimeout(() => {
+         productTab.classList.remove("skeleton");
+
+         productTab
+           .querySelectorAll(".hide-img")
+           .forEach((el) => el.classList.remove("hide-img"));
+         productTab
+           .querySelectorAll(".hide-box")
+           .forEach((el) => el.classList.remove("hide-box"));
+         productTab
+           .querySelectorAll(".hide-text")
+           .forEach((el) => el.classList.remove("hide-text"));
+       }, 3000);
+     });
+
+     const image = document.querySelectorAll(".img_skeleton");
+
+     image.forEach((image) => {
+       setTimeout(() => {
+         image.classList.remove("skeleton");
+
+         image
+           .querySelectorAll(".hide-img")
+           .forEach((el) => el.classList.remove("hide-img"));
+         image
+           .querySelectorAll(".hide-box")
+           .forEach((el) => el.classList.remove("hide-box"));
+         image
+           .querySelectorAll(".l-box")
+           .forEach((el) => el.classList.remove("l-box"));
+         image
+           .querySelectorAll(".hide-text")
+           .forEach((el) => el.classList.remove("hide-text"));
+       }, 3000);
+     });
+   });
+ </script>
+ <script>
+   require([
+     'jquery',
+     'domReady'
+   ], function ($) {
+     // on scroll header top hide
+
+     var c,
+       currentScrollTop = 0,
+       navbar = $("#header_top");
+
+     $(window).scroll(function () {
+       var a = $(window).scrollTop();
+       var b = navbar.height();
+
+       currentScrollTop = a;
+
+       if (c < currentScrollTop && a > b + b) {
+         navbar.addClass("scrollUp");
+       } else if (c > currentScrollTop && !(a <= b)) {
+         navbar.removeClass("scrollUp");
+       }
+       c = currentScrollTop;
+
+       console.log(a);
+     });
+
+     // product wishlist
+
+     $(".product_item_wishlist_btn").on("click", function () {
+       $(this).toggleClass("in_wishlist");
+     });
+
+     // home product tab
+
+     const content = document.querySelectorAll(".home_product_wrap");
+     const tab = document.querySelectorAll(".product_tab_label_item");
+     const slider = document.querySelector(".product_tab_label_wrap");
+
+     function hideHomeProductTabContent() {
+       content.forEach((item) => {
+         item.style.display = "none";
+       });
+       tab.forEach((item) => {
+         item.classList.remove("active");
+       });
+     }
+
+     function showHomeProductTabContent(i = 0) {
+       content[i].style.display = "flex";
+       tab[i].classList.add("active");
+     }
+
+     hideHomeProductTabContent();
+     showHomeProductTabContent();
+
+     slider.addEventListener("click", (e) => {
+       const targetItem = e.target;
+       if (targetItem) {
+         tab.forEach((item, i) => {
+           if (targetItem == item) {
+             hideHomeProductTabContent();
+             showHomeProductTabContent(i);
+           }
+         });
+       }
+     });
+   });
+ </script>
+ <script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "wishlist": {
+                    "component": "Magento_Wishlist/js/view/wishlist"
+                }
+            }
+        }
+    }
+}
+
+</script>

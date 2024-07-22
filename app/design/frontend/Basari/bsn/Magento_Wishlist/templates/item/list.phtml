@@ -1,0 +1,47 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Items $block */
+$columns = $block->getColumns();
+?>
+
+
+
+ <section>
+    <div class="main_container img_skeleton skeleton">
+      <h3 class="faq_main_title hide-text">Wishlist</h3>
+      <div class="wishlist_wrapper">
+	    <?php if (count($block->getItems())) : ?>
+        <ul class="wishlist_items">
+		  <?php foreach ($block->getItems() as $item) : ?>
+          <?php
+            $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+                    ->init($item, 'product_base_image')
+                    ->constrainOnly(true)
+                    ->keepAspectRatio(true)
+                    ->keepTransparency(true)
+                    ->keepFrame(false)
+                    ->resize(150, 150)->getUrl();
+          ?>         
+          <li class="wishlist_item hide-div price<?= $block->escapeHtmlAttr($item->getPrice()) ?> final<?= $block->escapeHtmlAttr($item->getSpecialPrice()) ?> url<?= $block->escapeHtmlAttr($item->getProductUrl()) ?> imgurl<?php echo $imageUrl; ?>" id="item_<?= $block->escapeHtmlAttr($item->getId()) ?>">
+            <?php foreach ($columns as $column) : ?>
+                <?= $column->setItem($item)->toHtml();?>
+            <?php endforeach; ?>
+          </li>          
+        <?php endforeach; ?>
+		</ul>
+		<?php else : ?>
+			<div class="message info empty">
+				<span><?= $block->escapeHtml(__('This Wish List has no Items')) ?></span>
+			</div>
+		<?php endif; ?>
+      </div>
+    </div>
+  </section>
+  <?php foreach ($columns as $column) : ?>
+    <?php //$column->getAdditionalHtml() ?>
+<?php endforeach; ?>

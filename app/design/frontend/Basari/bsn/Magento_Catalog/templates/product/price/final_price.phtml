@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+
+/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
+$priceModel = $block->getPriceType('regular_price');
+
+/** ex: \Magento\Catalog\Pricing\Price\FinalPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
+$finalPriceModel = $block->getPriceType('final_price');
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view') ? true : false;
+?>
+<div class="home_product_item_price hide-price-text img_skeleton skeleton">
+<?php if ($block->hasSpecialPrice()) :?>
+    <div class="home_product_item_actual_price">
+        <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
+            'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
+            'price_type'        => 'oldPrice',
+            'include_container' => true,
+            'skip_adjustments'  => true
+        ]); ?>
+    </div>
+    <div class="home_product_item_sale_price">
+        <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
+            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+            'price_type'        => 'finalPrice',
+            'include_container' => true,
+            'schema' => $schema
+        ]); ?>
+    </div>   
+<?php else :?>
+    <div class="home_product_item_sale_price">
+    <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
+        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+        'price_type'        => 'finalPrice',
+        'include_container' => true,
+        'schema' => $schema
+    ]); ?>
+	</div>
+<?php endif; ?>
+
+<?php if ($block->showMinimalPrice()) :?>
+    <?php if ($block->getUseLinkForAsLowAs()) :?>
+        <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
+            <?= /* @noEscape */ $block->renderAmountMinimal() ?>
+        </a>
+    <?php else :?>
+        <span class="minimal-price-link">
+            <?= /* @noEscape */ $block->renderAmountMinimal() ?>
+        </span>
+    <?php endif?>
+<?php endif; ?>
+</div>
+<?php
+	$item = $block->getSaleableItem();
+	$finalPrice = (float)$item->getFinalPrice();
+	$price = (float)$item->getPrice();
+	$saveAmount = $price - $finalPrice;
+    $_savePercent = 100 - round(((float)$item->getFinalPrice() / (float)$item->getPrice()) * 100);
+ //echo '<b style="color:#008000">'.$_savePercent . '% off </b>';
+?>
+<div class="save-percentage img_skeleton skeleton">
+   <span class="related_product_item_discount"><?php echo '<b>'.$_savePercent . '% off </b>'; ?></span>
+</div>
+<?php if($price > $finalPrice){ ?>
+<div class="home_product_item_save_amount hide-sub-text img_skeleton skeleton">save AED <?php echo $saveAmount; ?></div>
+<?php } ?>

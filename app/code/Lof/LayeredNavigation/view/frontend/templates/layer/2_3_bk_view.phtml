@@ -1,0 +1,101 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $block \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+<?php if ($block->canShowBlock()) : ?>
+<section class="shop_prod_sec">
+    <div class="main_container">
+      <div class="shop_child_wrap">
+	    <?php $filtered = count($block->getLayer()->getState()->getFilters()) ?>
+        <div class="shop_filter_wrap skeleton" data-count="<?php /* @escapeNotVerified */ echo $filtered; ?>">		 
+          <h5 class="filter_main_title hide-text">Shop The Latest</h5>
+          <div class="filter_search hide-box">
+            <input type="search" />
+            <button class="filter_search_btn"><i class="fas fa-search"></i></button>
+
+          </div>
+          <h6 class="filter_sub_title">Filter by</h6>
+		  
+          
+				<?= $block->getChildHtml('state') ?>
+
+				<?php if ($block->getLayer()->getState()->getFilters()) : ?>
+					<div class="block-actions filter-actions">
+						<a href="<?= $block->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear"><span><?= $block->escapeHtml(__('Clear All')) ?></span></a>
+					</div>
+				<?php endif; ?>
+				<?php $wrapOptions = false; $activeKey = 0; $activeArray = []; ?>
+				<?php foreach ($block->getFilters() as $filter) : ?>					
+					<?php if (!$wrapOptions) : ?>						
+						<dl class="filter-options" id="narrow-by-list">
+						<?php $wrapOptions = true;
+					endif; ?>
+						<?php if ($filter->getItemsCount()) : ?>
+					<div class="filter_box">
+						<div class="block-content filter-content">
+							<div class="filter_label_box">
+							  <a class="filter_label_box_child main" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">
+								<?= $block->escapeHtml(__($filter->getName())) ?>
+								<span class="filter_label_box_arrow">
+								  <i class="fas fa-chevron-down"></i>
+								</span>
+							  </a>
+							</div>
+							<div class="collapse show" id="filter">
+								<div class="filter_drop">
+									<?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php
+                        if ($block->getRequest()->getParam($filter->getRequestVar())) {
+                            $activeArray[] = $activeKey;
+                        }
+                        $activeKey++;
+                    ?>
+						<?php endif; ?>
+						
+				<?php endforeach; ?>
+				<?php if ($wrapOptions) : ?>
+					</dl>
+				<?php endif; ?>
+          <div>
+            <button class="primary_btn w_100">Apply Filters</button>
+            <button class="filter_clear_btn w_100">Clear all</button>
+          </div>
+		   <?php if ($wrapOptions): ?>
+                </div>
+				<script type="text/x-magento-init">
+					{
+						"#narrow-by-list": {
+							"accordion": {
+								"openedState": "active",
+								"collapsible": true,
+								"active": <?= sizeof($activeArray) ? $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($activeArray) : 'false' ?>,
+								"multipleCollapsible": true
+							},
+							"Lof_LayeredNavigation/js/layer": {}
+						}
+					}
+				</script>
+            <?php endif; ?>
+            <div id="lof_overlay" class="lof_overlay">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>" alt="Loading...">
+            </div>	
+
+        </div>
+	
+    <div class="filter-overlay"></div>
+	<?php endif; ?>

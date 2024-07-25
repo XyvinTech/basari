@@ -6887,9 +6887,9 @@ fieldset[disabled] .product-item-actions .actions-secondary > .action-gift.actio
   padding: 0 10px;
   text-align: center;
 }
-.toolbar-products .pages {
+/*.toolbar-products .pages {
   display: none;
-}
+}*/
 .products.wrapper ~ .toolbar-products .pages {
   display: block;
 }

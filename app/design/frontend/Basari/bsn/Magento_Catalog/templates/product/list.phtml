@@ -30,7 +30,7 @@ $_helper = $block->getData('outputHelper');
         </div>
     </div>
 <?php else: ?>
-    <?php //$block->getToolbarHtml() ?>
+    <?php $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
     if ($block->getMode() === 'grid') {
@@ -97,7 +97,7 @@ $_helper = $block->getData('outputHelper');
             <?php endforeach; ?>
         </ul>
     </div>
-    <?php //$block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    <?php echo $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
     <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
     {

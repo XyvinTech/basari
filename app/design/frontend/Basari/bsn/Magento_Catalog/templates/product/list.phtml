@@ -16,9 +16,19 @@ use Magento\Framework\App\Action\Action;
  */
 ?>
 <?php
-$_productCollection = $block->getLoadedProductCollection();
+
+$_productCollection = $block->getLoadedProductCollection()->joinTable(
+                    'cataloginventory_stock_item',
+                    'product_id=entity_id',
+                    ['qty'], // you can specify specific columns here
+                    null,
+                    'left'
+                );
 /** @var \Magento\Catalog\Helper\Output $_helper */
 $_helper = $block->getData('outputHelper');
+
+$_helperStock = $this->helper(Basari\UploadForm\Helper\Data::class);
+
 ?>
 <?php if (!$_productCollection->count()): ?>
     <div class="shop_product_wrapper ">
@@ -30,7 +40,7 @@ $_helper = $block->getData('outputHelper');
         </div>
     </div>
 <?php else: ?>
-    <?php $block->getToolbarHtml() ?>
+    <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
     if ($block->getMode() === 'grid') {
@@ -64,25 +74,33 @@ $_helper = $block->getData('outputHelper');
                     <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
                        class="product photo product-item-photo"
                        tabindex="-1">
-					    <span class="shop_product_item_discount">-21%</span>
+                        <span class="shop_product_item_discount">-21%</span>
                         <?= $productImage->toHtml() ?>
                     </a>
-					<button class="product_item_wishlist_btn">
-					  <div class="wishlist">
-						<i class="far fa-heart"></i>
-					  </div>
-					  <div class="wishlisted">
-						<i class="fas fa-heart"></i>
-					  </div>
-					</button>
-				</div>
+                    <button class="product_item_wishlist_btn">
+                      <div class="wishlist">
+                        <i class="far fa-heart"></i>
+                      </div>
+                      <div class="wishlisted">
+                        <i class="fas fa-heart"></i>
+                      </div>
+                    </button>
+                </div>
                         <?php $_productNameStripped = $block->stripTags($_product->getName(), null, true); ?>
                      
                             <a class="product-item-link"
                                href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
-							   <h3 class="home_product_name hide-text"><?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?></h3>
-                                
+                               <h3 class="home_product_name hide-text"><?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?></h3>
                             </a>
+                            <?php if ($_product->isAvailable()) : ?>
+                                    <div class="stock available">
+                                       <span><?php 
+                                        echo $_helperStock->getQty($_product->getSku()); ?>
+                                        <?= $block->escapeHtml(__(' available')) ?></span></div>
+                                <?php else : ?>
+                                    <div class="stock unavailable">
+                                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                            <?php endif; ?> 
                         <?php //$block->getReviewsSummaryHtml($_product, $templateType) ?>
                         <?= /* @noEscape */ $block->getProductPrice($_product) ?>
 

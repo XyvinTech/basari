@@ -3,6 +3,7 @@
 		//{{block class="\Sparsh\Banner\Block\Banner" template="Sparsh_Banner::banner.phtml"}} 
 		
 		//echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('basari_banner')->toHtml();
+
 	?>
  <div class="hero_section img_skeleton skeleton">
    <?php 
@@ -53,6 +54,7 @@
        </ul>
        <!-- most popular -->
        <ul class="home_product_wrap product_card skeleton"> <?php
+         $_helperStock = $this->helper(Basari\UploadForm\Helper\Data::class);
          $prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
          $mostRatedArray = $prouductHelper->getMostPopularProduct();
           foreach ($mostRatedArray as $mostRated) {
@@ -95,7 +97,15 @@
            </div>
            <a href="<?php echo $mostRated->getProductUrl(); ?>" class="home_product_item_child">
              <h3 class="home_product_name hide-text"> <?php echo $mostRated->getName(); ?> </h3>
-           
+                  <?php if ($mostRated->isAvailable()) : ?>
+                          <div class="stock available">
+                             <span><?php 
+                              echo $_helperStock->getQty($mostRated->getSku()); ?>
+                              <?= $block->escapeHtml(__(' available')) ?></span></div>
+                        <?php else : ?>
+                          <div class="stock unavailable">
+                              <span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                  <?php endif; ?> 
              <div class="home_product_item_price hide-price-text">
                <?php if ($regularPrice !== null): ?>
                   <div class="home_product_item_actual_price">
@@ -116,7 +126,7 @@
            
             </a>
            
-         </li> <?php  } ?> </ul>
+         </li> <?php } ?> </ul>
        <!-- most rated -->
        <ul class="home_product_wrap"> <?php
          //$prouductHelper = $this->helper('\Basari\MostView\Helper\Data');
@@ -160,6 +170,15 @@
            </div>
            <a href="<?php echo $mostRated->getProductUrl(); ?>" class="home_product_item_child">
              <h3 class="home_product_name hide-text"> <?php echo $mostRated->getName(); ?> </h3>
+              <?php if ($mostRated->isAvailable()) : ?>
+                          <div class="stock available">
+                             <span><?php 
+                              echo $_helperStock->getQty($mostRated->getSku()); ?>
+                              <?= $block->escapeHtml(__(' available')) ?></span></div>
+                        <?php else : ?>
+                          <div class="stock unavailable">
+                              <span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                  <?php endif; ?> 
              <div class="home_product_item_price hide-price-text">
                <?php if ($regularPrice !== null): ?>
                   <div class="home_product_item_actual_price">

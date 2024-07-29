@@ -40,7 +40,7 @@ $_helperStock = $this->helper(Basari\UploadForm\Helper\Data::class);
         </div>
     </div>
 <?php else: ?>
-    <?= $block->getToolbarHtml() ?>
+    <?php //$block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
     <?php
     if ($block->getMode() === 'grid') {
